@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <%- include("./partials/head.ejs") %>
+
+<body>
+
+    <%- include("./partials/nav_loged_out.ejs") %>
+
+        <div id="main-container-login">
+            <div class="login-title">Login</div>
+            
+            <form action="/login" method="post">                
+
+                <label for="email">Email: </label>
+                <input type="email" name="email" id="email">
+
+                <label for="password">Password: </label>
+                <input type="password" name="password" id="password">
+
+                <button type="submit">Log In</button>
+            </form>
+        </div>
+        
+        <%- include("./partials/footer.ejs") %>
+</body>
+</html>
