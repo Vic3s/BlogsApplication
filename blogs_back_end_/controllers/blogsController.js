@@ -29,8 +29,10 @@ const blog_creat_post = (req, res) => {
     const blog = new Blogs({title: req.body.title, snippet: req.body.snippet,
         body: req.body.body,  author: req.user._id}); 
     blog.save()
-    .then((result) => res.redirect("/http://localhost:5000/"))
+    .then((result) => res.redirect("/http://localhost:3000/"))
     .catch((err) => console.log(err));
+
+    console.log(req.body);
 
 }
 

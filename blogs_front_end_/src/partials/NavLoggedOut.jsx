@@ -1,3 +1,5 @@
+import "./nav_n_footer.css"
+
 export default function NavLogedOut() {
 
     return <nav>
@@ -6,7 +8,7 @@ export default function NavLogedOut() {
             </div>
             <ul>
                 <li><a href="/">Blogs</a></li>
-                <li><a href="/blogs/create">Create blogs</a></li> 
+                <li><a href="/create">Create blogs</a></li> 
                 <li><a href="/signup">Sign Up</a></li>
             </ul>
         </nav>

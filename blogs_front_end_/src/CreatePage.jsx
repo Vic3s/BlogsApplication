@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
+import NavLoggedIn from "./partials/NavLoggedIn.jsx"
+import "./create_page.css"
 
 
 function Create(){
@@ -13,7 +15,7 @@ function Create(){
         const blogObj = {title: title, snippet: snippet, body: body}
 
         fetch("http://localhost:5000/api/blogs/data", {
-            method: POST,
+            method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             }, body: JSON.stringify(blogObj),
@@ -27,9 +29,11 @@ function Create(){
     }
 
     return <>
+
+        <NavLoggedIn/>
     
-        <div >
-            <form handleSubmit={handleSubmit}>
+        <div className="create-blog">
+            <form onSubmit={handleSubmit}>
                 <div className="inputTitle">
                     <label htmlFor="title">Blog title:</label>
                     <input type="text" id="title" name="title" onChange={(e) => setTitle(e.target.value)} required/>
