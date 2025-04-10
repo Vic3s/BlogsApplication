@@ -6,8 +6,6 @@ function Login() {
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
 
-
-
     function postUserInput(e) {
         e.preventDefault();
 
@@ -18,12 +16,12 @@ function Login() {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(userLoginReqObj),
         }).then(response => {
             if(!response.ok){
-                throw new Error("*Faild to post guest imput info!*")
+                throw new Error("* Failed to post to server! *")
             }
-            console.log(response)
             return response.json();
         }).then(data => console.log('Response: ', data))
         .catch((err) => console.log(err));

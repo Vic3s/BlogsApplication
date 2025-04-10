@@ -5,70 +5,27 @@ const mongoose = require("mongoose");
 const blogRourts = require("./routes/blogRoutes.js");   
 const bcrypt = require("bcrypt");
 const morgan = require("morgan");
-const flash = require("express-flash");
-const session = require("express-session");
-const passport = require("passport");
-const method_override = require('method-override');
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
-const init_passport = require("./public/passport_configuraion/passport.js")
 const Account = require("./models/accounts");
 const Blogs = require("./models/blog.js");
-const { error } = require("console");
+const CookieAuth = require("./public/JWT/CookieJwtAuth").CookieAuth;
 
 const app = express();
 
-// INITIALIZE PASSPORT CONFIG  
-
-init_passport(passport,
-     async (email) => {
-        try{
-            const result = await Account.findOne({email: email});
-            return result;
-
-        }catch(e){
-            console.log(e)
-            return null;
-        }
-    },
-    async (id) => {
-        try{
-            const result = await Account.findOne({_id: id});
-            return result;
-            
-        }catch(e){
-            console.log(e)
-            return null;
-        }
-})
-
 //APP CONFIG
-
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({
-    origin: 'http://localhost:3000', 
-    credentials: true 
-}));
+app.use(cookieParser());
+
 app.use(morgan("dev"));
-app.use(flash());
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false,
-        httpOnly: true,
-        sameSite: 'lax'
-    }
-}));
-
-//PASSPORT SETTINGS SETUP
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(method_override('_method'));
 
 //BLOGS ROUTER IMPORT
 
@@ -158,16 +115,48 @@ app.post("/api/signup/data", async (req, res) => {
 
 // LOGIN PAGE POST
 
-app.post("/api/login/data", (req, res, next) => {passport.authenticate('local', (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.status(401).send({ message: 'Invalid credentials' });
+// app.post("/api/login/data", async (req, res) => {
+//     const {email, password} = req.body
 
-    req.logIn(user, (err) => {
-      if (err) return next(err);
-      return res.send({ message: 'Login successful', user: req.user });
+//     const user = await Account.findOne({email: email})
+//     .then(result => {return result})
+//     .catch(err => console.log(err));
+
+//     if(!bcrypt.compare(password, user.password)){
+//         return res.status(403).json({error: '* Invalid Credentials! *'});
+//     }
+
+//     const token = jwt.sign(user.toObject(), process.env.SECRET, {expiresIn: "30m"})
+
+//     res.cookie("token", token, {
+//         httpOnly: true
+//     });
+
+//     res.redirect("/")
+// });
+
+app.post("/api/login/data", async (req, res) => {
+
+    const {email, password} = req.body;
+
+    const user = await Account.findOne({email: email})
+    .then(result => {return result})
+    .catch(err => console.log(err));
+
+    if(!bcrypt.compare(password, user.password)){
+        return res.status(403).json({error: '* Invalid Credentials! *'});
+    }
+
+    const token = jwt.sign(user.toObject(), process.env.SECRET, {expiresIn: "30m"})
+
+    res.cookie("token", token, {
+        httpOnly: true
     });
-  })(req, res, next)
-});
+
+    res.send({message: "Login Successful!"});
+
+    // res.redirect("/")
+})
 
 // LOGOUT PAGE DELETE REQ
 
@@ -178,11 +167,25 @@ app.delete('/logout', (req, res) => {
 
 //RETURN USER IF AUTHENTICATED AND STORED IN SESSION
 
-app.get("/api/account/data", (req, res) => {
-    if (req.isAuthenticated()) {
+// app.get("/api/account/data", CookieAuth, (req, res) => {
+//     if (req.user) {
+//         console.log("Got the user")
+//         return res.send({ user: req.user });
+//     } else {
+//         console.log("Did not get the user")
+
+//         return res.status(401).send({ message: '* Not authenticated! *' });
+//     }
+// })
+
+app.get("/api/login/data", CookieAuth, (req, res) => {
+    if (req.user) {
+        console.log("Got the user")
         return res.send({ user: req.user });
     } else {
-        return res.status(401).send({ message: 'Not authenticated' });
+        console.log("Did not get the user")
+
+        return res.status(401).send({ message: '* Not authenticated! *' });
     }
 })
 

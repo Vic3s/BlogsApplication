@@ -3,16 +3,14 @@ import { useEffect, useState } from "react"
 
 export default function NavLoggedIn() {
 
-    const[user, setUser] = useState({});
+    const[user, setUser] = useState({user: null});
 
     useEffect(() => {
         const getUserIfExists = async() => {
-            await fetch("http://localhost:5000/api/account/data", {
-                method: 'GET',
-                credentials: "include",
-            })
+            await fetch("http://localhost:5000/api/login/data")
             .then(response => response.json())
             .then(userObj => {
+                console.log(userObj)
                 setUser(userObj.user)})
             .catch(err => console.log(err));
         }
@@ -20,9 +18,11 @@ export default function NavLoggedIn() {
     });
 
     function UserExistsCheck(){
-        if(!user){
+        if(user.user == null){
+            console.log(user)
             return <li><a href="/signup">Sign Up</a></li>
-        }else if(user){
+        }else{
+            console.log(user)
             return <li><a href="/account">Accoutn</a></li>
         }
         return

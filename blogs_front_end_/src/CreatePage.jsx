@@ -21,7 +21,7 @@ function Create(){
             }, body: JSON.stringify(blogObj),
         }).then(response => {
             if(!response.ok){
-                throw new Error("*Faild to post blog!*")
+                throw new Error("*Failed to post blog!*")
             }
             return response.json();
         }).then(data => console.log('Response: ', data))
