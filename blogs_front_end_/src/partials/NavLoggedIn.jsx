@@ -1,4 +1,4 @@
-import "./nav_n_footer.css"
+import "./partials_styles/nav_n_footer.css"
 import { useEffect, useState } from "react"
 
 export default function NavLoggedIn() {
@@ -7,10 +7,12 @@ export default function NavLoggedIn() {
 
     useEffect(() => {
         const getUserIfExists = async() => {
-            await fetch("http://localhost:5000/api/account/data")
+            await fetch("http://localhost:5000/api/account/data", {
+                method: 'GET',
+                credentials: "include",
+            })
             .then(response => response.json())
             .then(userObj => {
-                console.log(userObj.user)
                 setUser(userObj.user)})
             .catch(err => console.log(err));
         }
@@ -28,7 +30,7 @@ export default function NavLoggedIn() {
 
     return <nav>
             <div class="site-title">
-                <p>Blogs</p>
+                <p>Blogify</p>
             </div>
             <ul>
                 <li><a href="/">Blogs</a></li>

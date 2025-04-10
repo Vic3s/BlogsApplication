@@ -1,3 +1,4 @@
+import "./styles/signup_page.css"
 import { useState } from "react";
 
 function Signup() {
@@ -28,8 +29,8 @@ function Signup() {
 
     return <>
     
-        <div id="main-container-signup">
-            <div className="signup-title">Signup</div>
+        <div className="main-container-signup">
+            <div className="signup-title">Sign Up for an account!</div>
             
             <form onSubmit={postUserInput}>                
                 <label htmlFor="name">Name: </label>
@@ -43,7 +44,7 @@ function Signup() {
 
                 <button type="submit">Sign Up</button>
             </form>
-            <p>You have and account? <span className="link-login"><a href="/login">Log in!</a></span></p>
+            <p className="login-redirect">You have and account? <span className="link-login"><a href="/login">Log in!</a></span></p>
         </div>
     </>
 

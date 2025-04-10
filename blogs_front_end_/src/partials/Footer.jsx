@@ -1,4 +1,4 @@
-import "./nav_n_footer.css"
+import "./partials_styles/nav_n_footer.css"
 
 export default function Footer() {
 

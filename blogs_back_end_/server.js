@@ -44,8 +44,6 @@ init_passport(passport,
 
 //APP CONFIG
 
-app.set('view engine', "ejs");
-
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -59,6 +57,11 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        sameSite: 'lax'
+    }
 }));
 
 //PASSPORT SETTINGS SETUP
@@ -161,7 +164,7 @@ app.post("/api/login/data", (req, res, next) => {passport.authenticate('local', 
 
     req.logIn(user, (err) => {
       if (err) return next(err);
-      return res.send({ message: 'Login successful', user });
+      return res.send({ message: 'Login successful', user: req.user });
     });
   })(req, res, next)
 });
@@ -176,14 +179,10 @@ app.delete('/logout', (req, res) => {
 //RETURN USER IF AUTHENTICATED AND STORED IN SESSION
 
 app.get("/api/account/data", (req, res) => {
-    if(req.user) {
-        console.log(req.isAuthenticated())
-        console.log(req.user)
-        res.send({user: req.user})
-    }else{
-        console.log(req.user)
-        console.log("else statment")
-        res.send({user: false})
+    if (req.isAuthenticated()) {
+        return res.send({ user: req.user });
+    } else {
+        return res.status(401).send({ message: 'Not authenticated' });
     }
 })
 

@@ -1,3 +1,4 @@
+import "./styles/login_page.css"
 import { useState } from "react"
 
 function Login() {
@@ -17,7 +18,6 @@ function Login() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: "include", 
             body: JSON.stringify(userLoginReqObj),
         }).then(response => {
             if(!response.ok){
@@ -31,8 +31,8 @@ function Login() {
 
     return <>
     
-        <div id="main-container-login">
-            <div className="login-title">Login</div>
+        <div className="main-container-login">
+            <div className="login-title">Log in to your account.</div>
             
             <form onSubmit={postUserInput}>                
 

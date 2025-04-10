@@ -1,0 +1,51 @@
+.main-container-signup{
+    border: black 1px solid;
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+    form{
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    input{
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+        padding: 8px;
+    }
+    label{
+        display: block;
+        margin-top: 24px;
+    }
+    button{
+        margin-top: 20px;
+        background: crimson;
+        color: white;
+        padding: 6px;
+        border: 0;
+        font-size: 1.2em;
+        cursor: pointer;
+    }
+    .signup-title{
+        text-align: center;
+        font-size: 35px;
+        margin-top: 70px;
+
+    }
+    .login-redirect{
+        text-align: center;
+    }
+    .link-login{
+
+        a{
+            color: crimson;
+            &:hover{
+                color: rgb(157, 3, 34);
+
+            }
+        }
+    }
+}

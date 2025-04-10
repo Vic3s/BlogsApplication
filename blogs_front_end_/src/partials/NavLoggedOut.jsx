@@ -1,10 +1,10 @@
-import "./nav_n_footer.css"
+import "./partials_styles/nav_n_footer.css"
 
 export default function NavLogedOut() {
 
     return <nav>
             <div class="site-title">
-                <p>Blogs</p>
+                <p>Blogify</p>
             </div>
             <ul>
                 <li><a href="/">Blogs</a></li>

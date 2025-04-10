@@ -1,6 +1,6 @@
 import { useState} from "react";
 import NavLoggedIn from "./partials/NavLoggedIn.jsx"
-import "./create_page.css"
+import "./styles/create_page.css"
 
 
 function Create(){

@@ -1,6 +1,6 @@
 import Footer from './partials/Footer'
 import { useEffect, useState } from 'react'
-import "./blogs_page.css"
+import "./styles/blogs_page.css"
 import NavLoggedIn from "./partials/NavLoggedIn.jsx"
 import NavLoggedOut from "./partials/NavLoggedOut.jsx"
 
@@ -23,7 +23,7 @@ function BlogsPage(){
     return <>
         <NavLoggedIn/>
         <div className="blog content">
-            <h1 className="heading1">Blogify</h1>
+            <h1 className="heading1">Create and post your blogs here!</h1>
             <hr color="#222" width="300px" size="4px" class="line"/>
             <h2>All Blogs</h2>
 
