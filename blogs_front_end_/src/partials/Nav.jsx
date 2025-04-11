@@ -1,5 +1,8 @@
-import "./partials_styles/nav_n_footer.css"
 import { useEffect, useState } from "react"
+import { Link } from 'react-router-dom'
+import "./partials_styles/nav_n_footer.css"
+
+
 
 export default function NavLoggedIn() {
 
@@ -10,7 +13,7 @@ export default function NavLoggedIn() {
             await fetch("http://localhost:5000/api/account/data", {
                 method: "GET",
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 credentials: 'include',
             })
@@ -24,9 +27,12 @@ export default function NavLoggedIn() {
 
     function UserExistsCheck(){
         if(user.user == null){
-            return <li><a href="/signup">Sign Up</a></li>
+            return <li><Link to="/signup">Sign Up</Link></li>
         }else{
-            return <li><a href="/account">Accoutn</a></li>
+            return <>
+                <li><Link to="/create">Create Blogs</Link></li>
+                <li><Link to="/account">Accoutn</Link></li>
+            </>
         }
     }
 
@@ -35,9 +41,9 @@ export default function NavLoggedIn() {
                 <p>Blogify</p>
             </div>
             <ul>
-                <li><a href="/">Blogs</a></li>
-                <li><a href="/create">Create blogs</a></li> 
-                {/* <li><a href="/account">Accoutn</a></li> */}
+                {/* <li><a href="/">Blogs</a></li> */}
+                {/* <li><a href="/create">Create blogs</a></li>  */}
+                <li><Link to="/">Blogs</Link></li>
                 <UserExistsCheck/>
             </ul>
         </nav>

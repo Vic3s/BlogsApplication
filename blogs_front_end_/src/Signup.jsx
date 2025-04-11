@@ -1,5 +1,6 @@
-import "./styles/signup_page.css"
 import { useState } from "react";
+import { Link } from 'react-router-dom'
+import "./styles/signup_page.css"
 
 function Signup() {
 
@@ -44,7 +45,8 @@ function Signup() {
 
                 <button type="submit">Sign Up</button>
             </form>
-            <p className="login-redirect">You have and account? <span className="link-login"><a href="/login">Log in!</a></span></p>
+            <p className="login-redirect">You have and account? <span className="link-login">
+                <Link to="/login">Log in!</Link></span></p>
         </div>
     </>
 

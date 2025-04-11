@@ -1,7 +1,8 @@
-import Footer from './partials/Footer'
 import { useEffect, useState } from 'react'
-import "./styles/blogs_page.css"
+import { Link } from 'react-router-dom'
+import Footer from './partials/Footer'
 import NavLoggedIn from "./partials/Nav.jsx"
+import "./styles/blogs_page.css"
 
 
 function BlogsPage(){

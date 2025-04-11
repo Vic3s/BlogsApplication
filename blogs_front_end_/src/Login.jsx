@@ -1,10 +1,14 @@
-import "./styles/login_page.css"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import "./styles/login_page.css"
+
 
 function Login() {
 
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
+
+    const navigate = useNavigate();
 
     function postUserInput(e) {
         e.preventDefault();
@@ -23,8 +27,12 @@ function Login() {
                 throw new Error("* Failed to post to server! *")
             }
             return response.json();
-        }).then(data => console.log('Response: ', data))
+        }).then(data => {
+            console.log('Response: ', data)
+            navigate("/");
+        })
         .catch((err) => console.log(err));
+
     }
 
     return <>

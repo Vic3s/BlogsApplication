@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-exports.CookieAuth = (req, res, next) => {
+exports.CookieAuth = async (req, res, next) => {
     const token = req.cookies.token
 
     try{

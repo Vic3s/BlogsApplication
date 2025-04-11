@@ -1,4 +1,5 @@
 import { useState} from "react";
+import { useNavigate } from "react-router-dom";
 import NavLoggedIn from "./partials/Nav.jsx"
 import "./styles/create_page.css"
 
@@ -9,22 +10,29 @@ function Create(){
     const[snippet, setSnippet] = useState("");
     const[body, setBody] = useState("");
 
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const blogObj = {title: title, snippet: snippet, body: body}
 
-        fetch("http://localhost:5000/api/blogs/data", {
+        fetch("http://localhost:5000/api/blogs/create", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-            }, body: JSON.stringify(blogObj),
+            },
+            credentials: 'include',
+             body: JSON.stringify(blogObj),
         }).then(response => {
             if(!response.ok){
                 throw new Error("*Failed to post blog!*")
             }
             return response.json();
-        }).then(data => console.log('Response: ', data))
+        }).then(data => {
+            console.log('Response: ', data)
+            navigate("/")
+        })
         .catch((err) => console.log(err));
     }
 

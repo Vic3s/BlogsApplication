@@ -2,7 +2,6 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
-const blogRourts = require("./routes/blogRoutes.js");   
 const bcrypt = require("bcrypt");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -27,44 +26,46 @@ app.use(cookieParser());
 
 app.use(morgan("dev"));
 
-//BLOGS ROUTER IMPORT
-
-// app.use("/blogs", blogRourts);
-
 // BLOGS ROUTES
 
 app.get("/api/blogs/data", async (req, res) => {
 
     Blogs.find().sort({ createdAt: -1 })
     .then((result) => {
-        // if(req.isAuthenticated()){
-        //     // res.send({result: result, user: req.user});
-        //     res.send({result: result});
-
-        // }else{
-        //     // res.send({result: result, user: false});
-        //     res.send({result: result});
-        // }
         res.send({result: result})
     })
     .catch(err => console.log(err))
 
 })
 
-app.post("/api/blogs/data", (req, res) => {
-    // if(req.user){
-    //     const blog = new Blogs({title: req.body.title, snippet: req.body.snippet,
-    //         body: req.body.body, author: req.user._id}); 
-    // }
+app.post("/api/blogs/create", CookieAuth, (req, res) => {
+
     const blog = new Blogs({title: req.body.title, snippet: req.body.snippet,
-        body: req.body.body, author: "unknown"});
-    
-    
+        body: req.body.body, author: req.user._id});
+
     blog.save()
     
     .then((result) => res.status(201).json({ message: 'Blog created' }))
     .catch((err) => console.log(err));
-        
+    
+})
+
+app.get("/api/blogs/:id", async (req, res) => {
+
+    const id = req.params.id;
+    
+    await Blogs.findOne({_id: id})
+    .then(async (result) => {
+        console.log(result.author)
+        const authorObj = await Account.findOne({_id: result.author})
+        .then(result => {return result})
+        .catch(err => console.log(err))
+
+        res.send({blog: result, authorName: authorObj.name })
+    })
+    .catch((err) => { res.status(404).json({error: "* Blog Doesnt exist! *"})});
+
+
 })
 
 app.delete("/api/blogs/:id", (req, res) => {
@@ -83,24 +84,6 @@ app.delete("/api/blogs/:id", (req, res) => {
 
 })
 
-app.get("/api/blogs/:id", (req, res) => {
-
-    //FINISH LATER
-
-    // const id = req.params.id;
-    
-    // Blog.findById(id)
-    // .then(async (result) => {
-    //     const author = await Account.findById(result.author)
-    //     .then(result => {return result.name})
-    //     .catch(err => consol.log(err))
-
-    //     res.render("details", {blog: {title: result.title, body: result.body, author: author}, title: "Blog details" }) 
-    // })
-    // .catch((err) => { res.status(404).render("404", {title: "404-NotFound"})});
-
-})
-
 // SIGNUP PAGE POST
 
 app.post("/api/signup/data", async (req, res) => {
@@ -114,26 +97,6 @@ app.post("/api/signup/data", async (req, res) => {
 })
 
 // LOGIN PAGE POST
-
-// app.post("/api/login/data", async (req, res) => {
-//     const {email, password} = req.body
-
-//     const user = await Account.findOne({email: email})
-//     .then(result => {return result})
-//     .catch(err => console.log(err));
-
-//     if(!bcrypt.compare(password, user.password)){
-//         return res.status(403).json({error: '* Invalid Credentials! *'});
-//     }
-
-//     const token = jwt.sign(user.toObject(), process.env.SECRET, {expiresIn: "30m"})
-
-//     res.cookie("token", token, {
-//         httpOnly: true
-//     });
-
-//     res.redirect("/")
-// });
 
 app.post("/api/login/data", async (req, res) => {
 
@@ -159,12 +122,13 @@ app.post("/api/login/data", async (req, res) => {
 
 // LOGOUT PAGE DELETE REQ
 
-app.delete('/logout', (req, res) => {
-    req.logOut(() => {});
-    res.redirect('http://localhost:3000/login');
-})
+// FINISH LATER
 
-//RETURN USER IF AUTHENTICATED AND STORED IN SESSION
+// app.delete('/logout', (req, res) => {
+//     res.redirect('http://localhost:3000/login');
+// })
+
+//RETURN USER IF AUTHENTICATED AND STORED IN COOKIES
 
 app.get("/api/account/data", CookieAuth, (req, res) => {
     if (req.user) {
