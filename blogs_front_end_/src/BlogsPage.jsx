@@ -1,8 +1,7 @@
 import Footer from './partials/Footer'
 import { useEffect, useState } from 'react'
 import "./styles/blogs_page.css"
-import NavLoggedIn from "./partials/NavLoggedIn.jsx"
-import NavLoggedOut from "./partials/NavLoggedOut.jsx"
+import NavLoggedIn from "./partials/Nav.jsx"
 
 
 function BlogsPage(){
@@ -18,13 +17,13 @@ function BlogsPage(){
             .catch(err => console.log(err));
         }
         getBlogs();
-    })
+    }, [])
 
     return <>
         <NavLoggedIn/>
         <div className="blog content">
             <h1 className="heading1">Create and post your blogs here!</h1>
-            <hr color="#222" width="300px" size="4px" class="line"/>
+            <hr color="#222" width="300px" size="4px" className="line"/>
             <h2>All Blogs</h2>
 
             <div>
@@ -35,8 +34,7 @@ function BlogsPage(){
                         </a>
                     })
                 }
-            </div>
-                    
+            </div>       
         </div>
 
         <Footer></Footer>

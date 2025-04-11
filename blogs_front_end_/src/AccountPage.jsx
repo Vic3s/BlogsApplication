@@ -2,17 +2,24 @@ import { useEffect, useState } from "react"
 
 function Account(){
 
-    const[acc, setAcc] = useState({})
+    const[acc, setAcc] = useState({user: null})
 
     useEffect(()=> {
         const getAcc = async () => {
-            await fetch("http://localhost:5000/api/account/data")
-            .then(response =>  response.json())
-            .then(json => setAcc(json))
-            .cath(err => console.log(err));
+            await fetch("http://localhost:5000/api/account/data", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            })
+            .then(response => response.json())
+            .then(accObj => {
+                setAcc(accObj.user)})
+            .catch(err => console.log(err));
         }
         getAcc();
-    })
+    }, [])
 
 
     return  <div id="main-container-accoutn">

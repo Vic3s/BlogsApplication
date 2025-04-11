@@ -1,5 +1,5 @@
 import { useState} from "react";
-import NavLoggedIn from "./partials/NavLoggedIn.jsx"
+import NavLoggedIn from "./partials/Nav.jsx"
 import "./styles/create_page.css"
 
 

@@ -155,7 +155,6 @@ app.post("/api/login/data", async (req, res) => {
 
     res.send({message: "Login Successful!"});
 
-    // res.redirect("/")
 })
 
 // LOGOUT PAGE DELETE REQ
@@ -167,45 +166,13 @@ app.delete('/logout', (req, res) => {
 
 //RETURN USER IF AUTHENTICATED AND STORED IN SESSION
 
-// app.get("/api/account/data", CookieAuth, (req, res) => {
-//     if (req.user) {
-//         console.log("Got the user")
-//         return res.send({ user: req.user });
-//     } else {
-//         console.log("Did not get the user")
-
-//         return res.status(401).send({ message: '* Not authenticated! *' });
-//     }
-// })
-
-app.get("/api/login/data", CookieAuth, (req, res) => {
+app.get("/api/account/data", CookieAuth, (req, res) => {
     if (req.user) {
-        console.log("Got the user")
         return res.send({ user: req.user });
     } else {
-        console.log("Did not get the user")
-
         return res.status(401).send({ message: '* Not authenticated! *' });
     }
 })
-
-//CHECK AUTHENTICATION
-
-function checkAuthenticated (req, res, next) {
-    if (req.isAuthenticated()){
-        return next()
-    }
-    res.redirect('/login');
-}
-
-//CHECK NOT AUTHENTICATED
-
-function checkNotAuthenticated(req, res, next){
-    if (req.isAuthenticated()){
-        return res.redirect('/')
-    }
-    next()
-}
 
 //DATABASE CONNECTION FUNC
 
