@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import NewNav from "./partials/NewNav"
 import "./styles/login_page.css"
-
 
 function Login() {
 
@@ -38,6 +38,8 @@ function Login() {
     return <>
     
         <div className="main-container-login">
+            <NewNav/>
+
             <div className="login-title">Log in to your account.</div>
             
             <form onSubmit={postUserInput}>                

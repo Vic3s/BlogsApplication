@@ -13,6 +13,7 @@ const router = createBrowserRouter([{path: "/", element: <BlogsPage/>},
   {path: "/create", element: <CreatePage/>}, {path: "/account", element: <AccountPage/>},
 {path: "login", element: <Login/>}, {path: "/signup", element: <Signup/>}, 
 {path: "/blogs/:id", element: <DetailsPage/>}])
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router}/>

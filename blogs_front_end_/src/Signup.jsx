@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import NewNav from "./partials/NewNav";
 import "./styles/signup_page.css"
 
 function Signup() {
@@ -8,6 +9,7 @@ function Signup() {
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
 
+    const navigate = useNavigate();
 
     const postUserInput = (e) => {
         e.preventDefault();
@@ -24,13 +26,18 @@ function Signup() {
                 throw new Error("*Faild to post blog!*")
             }
             return response.json();
-        }).then(data => console.log('Response: ', data))
+        }).then(data => {
+            console.log('Response: ', data);
+            navigate("/");
+        })
         .catch((err) => console.log(err));
     }
 
     return <>
-    
         <div className="main-container-signup">
+            <NewNav/>
+
+
             <div className="signup-title">Sign Up for an account!</div>
             
             <form onSubmit={postUserInput}>                

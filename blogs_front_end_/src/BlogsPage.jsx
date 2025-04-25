@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from './partials/Footer'
-import NavLoggedIn from "./partials/Nav.jsx"
+import NewNav from './partials/NewNav'
 import "./styles/blogs_page.css"
-
 
 function BlogsPage(){
 
@@ -21,15 +20,15 @@ function BlogsPage(){
     }, [])
 
     return <>
-        <NavLoggedIn/>
+        <NewNav/>
         <div className="blog content">
             <h1 className="heading1">Create and post your blogs here!</h1>
             <hr color="#222" width="300px" size="4px" className="line"/>
-            <h2>All Blogs</h2>
+            <h2 className="all-blogs-title mb-5"><u>All Blogs</u></h2>
 
             <div>
                 {blogs.map((blog)=> {
-                    return <a className="single" key={blog._id} href={`/blogs/${blog._id}`}>
+                    return <a className="single-blog" key={blog._id} href={`/blogs/${blog._id}`}>
                             <h3 className="title">{blog.title}</h3>
                             <p className="snippit">{blog.snippet}</p>
                         </a>

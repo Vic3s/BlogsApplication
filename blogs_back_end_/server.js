@@ -50,6 +50,15 @@ app.post("/api/blogs/create", CookieAuth, (req, res) => {
     
 })
 
+app.post("/api/logout", (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/', })
+    res.send({message: "Cookie Deleted, User loged out"})
+})
+
 app.get("/api/blogs/:id", async (req, res) => {
 
     const id = req.params.id;

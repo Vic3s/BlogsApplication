@@ -1,6 +1,7 @@
 import { useEffect, useState} from "react"
 import { useParams } from "react-router-dom";
 import "./styles/details_page.css"
+import NewNav from "./partials/NewNav";
 
 
 function DetailsPage (){
@@ -31,6 +32,8 @@ function DetailsPage (){
     return <>
 
         <div className="blog-container-details">
+            <NewNav/>
+
             <div className="blog-title-container">
                 <h2 className="title-blog">{blog.title}</h2>
             </div>

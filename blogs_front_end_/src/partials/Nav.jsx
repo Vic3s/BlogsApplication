@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import "./partials_styles/nav_n_footer.css"
 
 
-
 export default function NavLoggedIn() {
 
     const[user, setUser] = useState({user: null});
