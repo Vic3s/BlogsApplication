@@ -19,6 +19,11 @@ const blogSchema = new Schema({
     author: {
         type: String,
         require: true
+    },
+    image:
+    {
+        data: Buffer,
+        contentType: String
     }
 
 }, { timestamps: true });

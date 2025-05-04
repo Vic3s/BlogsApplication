@@ -15,6 +15,10 @@ const accountsSchema = new Schema({
     password: {
         type: String,
         require: true
+    },
+    profilePic: {
+        type: Buffer,
+        contentType: String
     }
 
 }, { timestamps: true });

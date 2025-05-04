@@ -1,7 +1,7 @@
 import { useEffect, useState} from "react"
 import { useParams } from "react-router-dom";
 import "./styles/details_page.css"
-import NewNav from "./partials/NewNav";
+import Nav from "./partials/Nav";
 
 
 function DetailsPage (){
@@ -32,7 +32,7 @@ function DetailsPage (){
     return <>
 
         <div className="blog-container-details">
-            <NewNav/>
+            <Nav/>
 
             <div className="blog-title-container">
                 <h2 className="title-blog">{blog.title}</h2>

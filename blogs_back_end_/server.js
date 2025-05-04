@@ -2,6 +2,9 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const bcrypt = require("bcrypt");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -10,6 +13,7 @@ const jwt = require("jsonwebtoken");
 
 const Account = require("./models/accounts");
 const Blogs = require("./models/blog.js");
+const { title } = require("process");
 const CookieAuth = require("./public/JWT/CookieJwtAuth").CookieAuth;
 
 const app = express();
@@ -19,38 +23,101 @@ app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,
   }));
+app.use(morgan("dev"));
 app.use(express.static('public'));
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(morgan("dev"));
+
+const JsonMiddleware = express.json();
+
+
+// MULTER SETUP 
+
+let storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '/uploads/'));
+    }, 
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+})
+
+let upload = multer({storage: storage});
 
 // BLOGS ROUTES
 
-app.get("/api/blogs/data", async (req, res) => {
+app.get("/api/blogs/data", JsonMiddleware, (req, res) => {
 
     Blogs.find().sort({ createdAt: -1 })
-    .then((result) => {
-        res.send({result: result})
+    .then(async (response) => {
+        let blogsObj = await Promise.all(response.map(async (item) => {
+        let authorName = "Unknown(Error)"
+        try{
+            const author_ = await Account.findOne({_id: item.author})
+            if(author_){
+                authorName = author_.name;
+            }
+        }catch(err){
+            console.log("Error with fetching the author: ", err)
+        }
+        
+        const buffer = Buffer.from(item.image.data); 
+        const base64 = buffer.toString('base64');
+        
+        return {
+            _id: item._id, 
+            title: item.title, 
+            snippet: item.snippet, 
+            body: item.body, 
+            author: authorName, 
+            image: `data:${item.image.contentType};base64,${base64}`,
+            createdAt: item.createdAt
+        }
+    }))
+    res.send(blogsObj)
+}).catch(err => console.log(err))
+
+})
+
+app.get("/api/blog/image/:id", JsonMiddleware, async (req, res) => {
+
+    Blogs.find({_id: req.params.id})
+    .then(async (result) => {
+        res.send({imageObj: result.image})
     })
     .catch(err => console.log(err))
 
 })
 
-app.post("/api/blogs/create", CookieAuth, (req, res) => {
+// CREATE A BLOG POST FUNCTION
 
-    const blog = new Blogs({title: req.body.title, snippet: req.body.snippet,
-        body: req.body.body, author: req.user._id});
+app.post("/api/blogs/create", upload.single("image"), CookieAuth, (req, res) => {
 
-    blog.save()
-    
-    .then((result) => res.status(201).json({ message: 'Blog created' }))
-    .catch((err) => console.log(err));
-    
+    const newBlogObj = {
+        title: req.body.title, 
+        snippet: req.body.snippet,
+        body: req.body.body, 
+        author: req.user._id,
+        image: {
+            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+            contentType: 'image/png'
+        }
+    };
+
+    Blogs.create(newBlogObj)
+    .then((err, blog) => {
+        if(err){
+            console.log(err)
+        }else{
+            blog.save()
+            .then((result) => res.status(201).json({ message: 'Blog created' }))
+            .catch((err) => console.log(err));
+        }  
+    })
 })
 
-app.post("/api/logout", (req, res) => {
+app.post("/api/logout", JsonMiddleware, (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
         secure: false,
@@ -59,7 +126,7 @@ app.post("/api/logout", (req, res) => {
     res.send({message: "Cookie Deleted, User loged out"})
 })
 
-app.get("/api/blogs/:id", async (req, res) => {
+app.get("/api/blogs/:id", JsonMiddleware, async (req, res) => {
 
     const id = req.params.id;
     
@@ -77,25 +144,9 @@ app.get("/api/blogs/:id", async (req, res) => {
 
 })
 
-app.delete("/api/blogs/:id", (req, res) => {
-
-    //FINISH LATER
-
-
-    // const id = req.params.id;
-
-    // Blog.findByIdAndDelete(id)
-    // .then((result) => {
-    //     res.json({ redirect: "/blogs" });
-    // })
-    // .catch((err) => console.log(err))
-
-
-})
-
 // SIGNUP PAGE POST
 
-app.post("/api/signup/data", async (req, res) => {
+app.post("/api/signup/data", JsonMiddleware, async (req, res) => {
     const hashed_pass = await bcrypt.hash(req.body.password, 10);
     const new_account = new Account({email: req.body.email, name: req.body.name, password: hashed_pass});
 
@@ -107,7 +158,7 @@ app.post("/api/signup/data", async (req, res) => {
 
 // LOGIN PAGE POST
 
-app.post("/api/login/data", async (req, res) => {
+app.post("/api/login/data", JsonMiddleware, async (req, res) => {
 
     const {email, password} = req.body;
 
@@ -129,17 +180,9 @@ app.post("/api/login/data", async (req, res) => {
 
 })
 
-// LOGOUT PAGE DELETE REQ
-
-// FINISH LATER
-
-// app.delete('/logout', (req, res) => {
-//     res.redirect('http://localhost:3000/login');
-// })
-
 //RETURN USER IF AUTHENTICATED AND STORED IN COOKIES
 
-app.get("/api/account/data", CookieAuth, (req, res) => {
+app.get("/api/account/data", JsonMiddleware, CookieAuth, (req, res) => {
     if (req.user) {
         return res.send({ user: req.user });
     } else {

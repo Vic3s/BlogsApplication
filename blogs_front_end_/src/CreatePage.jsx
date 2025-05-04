@@ -1,6 +1,6 @@
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import NavLoggedIn from "./partials/Nav.jsx"
+import Nav from "./partials/Nav";
 import "./styles/create_page.css"
 
 
@@ -9,21 +9,32 @@ function Create(){
     const[title, setTitle] = useState("");
     const[snippet, setSnippet] = useState("");
     const[body, setBody] = useState("");
+    const[image, setImage] = useState(null);
+    const dataObjMultipart = new FormData();
+
+    const HandleFile = (e) => {
+        setImage(e.target.files[0]);
+    }
+
+    useEffect(() => {
+        if (image) {
+            dataObjMultipart.append('image', image);
+        }
+    }, [image]);
 
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const blogObj = {title: title, snippet: snippet, body: body}
+        dataObjMultipart.append('title', title)
+        dataObjMultipart.append('snippet', snippet)
+        dataObjMultipart.append('body', body)
 
         fetch("http://localhost:5000/api/blogs/create", {
             method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
             credentials: 'include',
-             body: JSON.stringify(blogObj),
+            body: dataObjMultipart,
         }).then(response => {
             if(!response.ok){
                 throw new Error("*Failed to post blog!*")
@@ -37,8 +48,7 @@ function Create(){
     }
 
     return <>
-
-        <NavLoggedIn/>
+        <Nav/>
     
         <div className="create-blog">
             <form onSubmit={handleSubmit}>
@@ -54,9 +64,13 @@ function Create(){
                     <label htmlFor="body">Blog body:</label>
                     <textarea type="text" id="body" name="body" onChange={(e) => setBody(e.target.value)} required></textarea>
                 </div>
-
+                <div className="inputMainImage">
+                    <lable htmlFor="main-image">Pick an image</lable>
+                    <input type="file" name="main-image" id="main-image" onChange={HandleFile} />
+                </div>
                 <button>Submit</button>
             </form>
+
         </div>
 
         </>

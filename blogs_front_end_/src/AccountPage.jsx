@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import NewNav from "./partials/NewNav";
+import Nav from "./partials/Nav";
 
 function Account(){
 
@@ -39,7 +39,7 @@ function Account(){
     }
 
     return  <div id="main-container-accoutn">
-                <NewNav/>
+                <Nav/>
 
                 <h1 class="login-title">Account</h1>
 

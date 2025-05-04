@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import NewNav from "./partials/NewNav"
+import Nav from "./partials/Nav"
 import "./styles/login_page.css"
 
 function Login() {
@@ -38,7 +38,7 @@ function Login() {
     return <>
     
         <div className="main-container-login">
-            <NewNav/>
+            <Nav/>
 
             <div className="login-title">Log in to your account.</div>
             

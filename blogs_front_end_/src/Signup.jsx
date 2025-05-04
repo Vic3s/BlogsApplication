@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom'
-import NewNav from "./partials/NewNav";
+import Nav from "./partials/Nav";
 import "./styles/signup_page.css"
 
 function Signup() {
@@ -35,7 +35,7 @@ function Signup() {
 
     return <>
         <div className="main-container-signup">
-            <NewNav/>
+            <Nav/>
 
 
             <div className="signup-title">Sign Up for an account!</div>

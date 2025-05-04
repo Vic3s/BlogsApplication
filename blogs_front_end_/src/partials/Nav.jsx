@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom'
-import "./partials_styles/nav_n_footer.css"
+import "./partials_styles/nav_additional_styles.css"
 
-
-export default function NavLoggedIn() {
+function Nav() {
 
     const[user, setUser] = useState({user: null});
 
@@ -17,8 +15,7 @@ export default function NavLoggedIn() {
                 credentials: 'include',
             })
             .then(response => response.json())
-            .then(userObj => {
-                setUser(userObj)})
+            .then(userObj => setUser(userObj))
             .catch(err => console.log(err));
         }
         getUserIfExists();
@@ -26,25 +23,50 @@ export default function NavLoggedIn() {
 
     function UserExistsCheck(){
         if(user.user == null){
-            return <li><Link to="/signup">Sign Up</Link></li>
+            return <li className="nav-item ms-3">
+                        <a className="btn btn-dark btn-rounded" href="/signup">Sign Up</a>
+                    </li>
         }else{
             return <>
-                <li><Link to="/create">Create Blogs</Link></li>
-                <li><Link to="/account">Accoutn</Link></li>
+                <li className="nav-item">
+                    <a className="nav-link mx-2" href="/create">
+                    <img src="../public/plus-circle-svgrepo-com.svg" alt="Blogs Icon" className="create-icon"/> Create</a>
+                </li>
+                <li className="nav-item">
+                    <a className="nav-link mx-2" href="/account">
+                    <img src="../public/account-svgrepo-com.svg" alt="Blogs Icon" className="create-icon"/> Account</a>
+                </li>
             </>
         }
     }
 
-    return <nav>
-            <div class="site-title">
-                <p>Blogify</p>
+    return <>
+    
+    <nav className="navbar navbar-expand-lg fixed-top bg-light navbar-light">
+        <div className="container">
+            <a className="navbar-brand" href="/">Blogify</a>
+            <div className="search-bar-content">
+                <div className="search-bar-body">
+                    <img src="../public/search-icon.svg" alt="search-icon" />
+                    <div className="search-bar">
+                        <form>
+                            <input type="text" placeholder="Search..."/>    
+                        </form>
+                    </div>
+                </div>
             </div>
-            <ul>
-                {/* <li><a href="/">Blogs</a></li> */}
-                {/* <li><a href="/create">Create blogs</a></li>  */}
-                <li><Link to="/">Blogs</Link></li>
-                <UserExistsCheck/>
-            </ul>
-        </nav>
-
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav ms-auto align-items-center">
+                    <li className="nav-item">
+                        <a className="nav-link mx-2" href="/">
+                        <img src="../public/comment-lines-svgrepo-com.svg" alt="Blogs Icon" className="blogs-icon"/>Blogs</a>
+                    </li>
+                    <UserExistsCheck/>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    </>
 }
+
+export default Nav;
