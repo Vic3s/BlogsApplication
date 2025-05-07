@@ -34,26 +34,41 @@ function Signup() {
     }
 
     return <>
+        <Nav/>
         <div className="main-container-signup">
-            <Nav/>
 
+            <div className="signup-card">
+                <h1>Start <span>YOUR</span> <br />createive journy.</h1>
+            </div>
 
-            <div className="signup-title">Sign Up for an account!</div>
-            
-            <form onSubmit={postUserInput}>                
-                <label htmlFor="name">Name: </label>
-                <input type="text" name="name" id="name" onChange={(e) => setName(e.target.value)}/>
+            <div className="signup-form-container">
 
-                <label htmlFor="email">Email: </label>
-                <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}/>
+                <div className="signup-title">
+                    <h1>Sign Up.</h1>
+                </div>
+                
+                <form onSubmit={postUserInput}>  
+                    <div className="input-container">
+                        <label htmlFor="name">Username</label>
+                        <input type="text" name="name" id="name" onChange={(e) => setName(e.target.value)}/>
+                    </div>
+                    <div className="input-container">
+                        <label htmlFor="email">Email Address</label>
+                        <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}/>
+                    </div>
+                    <div className="input-container">
+                        <label htmlFor="password">Password</label>
+                        <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
+                    </div>
+                    
+                    <button type="submit" >Sign Up</button>
+                </form>
+                <p className="login-redirect">Already have an account?
+                    <span className="link-login"><Link to="/login"> Log in!</Link></span>
+                </p>
+            </div>
 
-                <label htmlFor="password">Password: </label>
-                <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
-
-                <button type="submit">Sign Up</button>
-            </form>
-            <p className="login-redirect">You have and account? <span className="link-login">
-                <Link to="/login">Log in!</Link></span></p>
+           
         </div>
     </>
 

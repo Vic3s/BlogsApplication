@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Nav from "./partials/Nav"
 import "./styles/login_page.css"
 
@@ -40,18 +40,41 @@ function Login() {
         <div className="main-container-login">
             <Nav/>
 
-            <div className="login-title">Log in to your account.</div>
+            <div className="login-card">
+                <h1>Join And <br /><span>Create.</span></h1>
+            </div>
+
+            <div className="login-form-container">
+
+                <div className="login-title">
+                    <h1>Log In.</h1>
+                </div>
             
-            <form onSubmit={postUserInput}>                
+                <form onSubmit={postUserInput}>
 
-                <label htmlFor="email">Email: </label>
-                <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)} />
+                    <div className="login-inputs">
+                        <div className="input-container">
+                            <label htmlFor="email">Email: </label>
+                            <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)} />
+                        </div>
+                        
+                        <div className="input-container">
+                            <label htmlFor="password">Password: </label>
+                            <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} />
+                        </div>
+                    </div>
+                    <p className="forgot-password-container">
+                        <Link to="/signup">Forgot password?</Link>
+                    </p>
 
-                <label htmlFor="password">Password: </label>
-                <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} />
+                    <button type="submit">Log In</button>
+                </form>
 
-                <button type="submit">Log In</button>
-            </form>
+                <p className="signup-redirect">Dont have an account? 
+                    <span className="link-signup"><Link to="/signup"> Sign Up!</Link></span>
+                </p>
+            </div>
+
         </div>
     
     </>
