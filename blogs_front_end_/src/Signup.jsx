@@ -38,7 +38,7 @@ function Signup() {
         <div className="main-container-signup">
 
             <div className="signup-card">
-                <h1>Start <span>YOUR</span> <br />createive journy.</h1>
+                <h1>Start <span>YOUR</span> <br />creative journey.</h1>
             </div>
 
             <div className="signup-form-container">
